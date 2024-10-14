@@ -1,6 +1,15 @@
 # STM32F104-ILI9341-TFT-DRIVER
 ## Fast driver for ILI9341 240X320 TFT SPI display, using STM32F104 blue pill
 Cannot find a good fast library one online, so forked one and improved it myself.
+This library works using DMA to increase transmission speed reducing CPU time. 
+
+## Working principle
+- Almost all the SPI messages (except color burst) are sent using HAL_SPI_Transmit_DMA function. 
+- When transmission ends, HAL_SPI_TxCpltCallback is triggered and a tx_completed flag is setted. 
+- When trying to send a msg, ILI9341_SPI_Tx wait the tx_completed to be setted (is BLOCKING; 
+  ok if transmission speed is high).
+- Before calling HAL_SPI_Transmit_DMA, the DC pin is setted high if data or low if command and CS is pulled low to enable the slave. 
+- The CS pin is pulled high when transmission ends and HAL_SPI_TxCpltCallback is triggered. 
 _________________________________________________________________________________________________
 ## Usage:
 - If using STM32CubeIde, copy:
@@ -17,6 +26,9 @@ ________________________________________________________________________________
   		external noise; with CS always low the tft is always listening to commands; if possible, better to use it.
 ________________________________________________________________________________________________
 ## Hardware setup
+### Clock setup
+- Setted to use external 72MHz oscillator
+
 ### SPI setup (for MOSI and CLK pins)
 - Mode: Transmit only master
 - Frame format: Motorola
