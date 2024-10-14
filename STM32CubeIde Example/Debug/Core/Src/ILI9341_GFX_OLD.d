@@ -1,0 +1,1 @@
+Core/Src/ILI9341_GFX_OLD.o: ../Core/Src/ILI9341_GFX_OLD.c
