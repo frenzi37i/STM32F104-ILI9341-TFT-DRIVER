@@ -12,6 +12,7 @@ This library works using DMA to increase transmission speed reducing CPU time.
 - The CS pin is pulled high when transmission ends and HAL_SPI_TxCpltCallback is triggered. 
 _________________________________________________________________________________________________
 ## Usage:
+- The driver is in the Driver folder of this repo
 - If using STM32CubeIde, copy:
   - ILI9341_STM32_Driver.h, ILI9341_GFX.h, fonts.h in the project inc folder
   - ILI9341_STM32_Driver.c,ILI9341_GFX.c, fonts.c in the project src folder
