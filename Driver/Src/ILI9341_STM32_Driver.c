@@ -57,12 +57,18 @@ void ILI9341_WriteBuffer(uint8_t *buffer, uint16_t len)
 
 void ILI9341_SetAddress(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 {
+	/*Define area of frame memory where MCU can access.
+	 * 0x2A - start column (x1) - end column (x2)
+	 * 0x2B - start row (y1) - end row (y2)
+	 * 0X2C - transfer data from MCU to memory
+	 *
+	 * after 0X2C display waits for image data - in this library data are sent using ILI9341_DrawColorBurst()
+	 * */
 	uint8_t buffer[4];
 	buffer[0] = x1 >> 8;
 	buffer[1] = x1;
 	buffer[2] = x2 >> 8;
 	buffer[3] = x2;
-
 	ILI9341_WriteCommand(0x2A);
 	ILI9341_WriteBuffer(buffer, sizeof(buffer));
 
@@ -70,7 +76,6 @@ void ILI9341_SetAddress(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 	buffer[1] = y1;
 	buffer[2] = y2 >> 8;
 	buffer[3] = y2;
-
 	ILI9341_WriteCommand(0x2B);
 	ILI9341_WriteBuffer(buffer, sizeof(buffer));
 
@@ -276,7 +281,7 @@ void ILI9341_DrawColorBurst(uint16_t color, uint32_t size)
 
 	if((size*2) < BURST_MAX_SIZE)
 	{
-		BufferSize = size;
+		BufferSize = size*2;
 	}
 	else
 	{
@@ -338,17 +343,14 @@ void ILI9341_DrawPixel(uint16_t x,uint16_t y,uint16_t color)
 void ILI9341_DrawRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t color)
 {
 	if((x >=LCD_WIDTH) || (y >=LCD_HEIGHT)) return;
-
 	if((x+width-1)>=LCD_WIDTH)
 	{
 		width=LCD_WIDTH-x;
 	}
-
 	if((y+height-1)>=LCD_HEIGHT)
 	{
 		height=LCD_HEIGHT-y;
 	}
-
 	ILI9341_SetAddress(x, y, x+width-1, y+height-1);
 	ILI9341_DrawColorBurst(color, height*width);
 }
@@ -356,12 +358,10 @@ void ILI9341_DrawRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t heig
 void ILI9341_DrawHLine(uint16_t x, uint16_t y, uint16_t width, uint16_t color)
 {
 	if((x >=LCD_WIDTH) || (y >=LCD_HEIGHT)) return;
-
 	if((x+width-1)>=LCD_WIDTH)
 	{
 		width=LCD_WIDTH-x;
 	}
-
 	ILI9341_SetAddress(x, y, x+width-1, y);
 	ILI9341_DrawColorBurst(color, width);
 }

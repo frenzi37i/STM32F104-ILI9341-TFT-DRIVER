@@ -80,48 +80,13 @@ void ILI9341_DrawFilledCircle(uint16_t X, uint16_t Y, uint16_t radius, uint16_t 
 
 void ILI9341_DrawHollowRectangleCoord(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t color)
 {
-	uint16_t xLen = 0;
-	uint16_t yLen = 0;
-	uint8_t negX = 0;
-	uint8_t negY = 0;
-	float negCalc = 0;
-
-	negCalc = X1 - X0;
-	if(negCalc < 0) negX = 1;
-	negCalc = 0;
-
-	negCalc = Y1 - Y0;
-	if(negCalc < 0) negY = 1;
-
-	//DRAW HORIZONTAL!
-	if(!negX)
-	{
-		xLen = X1 - X0;
-	}
-	else
-	{
-		xLen = X0 - X1;
-	}
+	uint16_t xLen = abs(X0-X1);
+	uint16_t yLen = abs(Y0-Y1);
 	ILI9341_DrawHLine(X0, Y0, xLen, color);
 	ILI9341_DrawHLine(X0, Y1, xLen, color);
-
-	//DRAW VERTICAL!
-	if(!negY)
-	{
-		yLen = Y1 - Y0;
-	}
-	else
-	{
-		yLen = Y0 - Y1;
-	}
-
 	ILI9341_DrawVLine(X0, Y0, yLen, color);
 	ILI9341_DrawVLine(X1, Y0, yLen, color);
-
-	if((xLen > 0)||(yLen > 0))
-	{
-		ILI9341_DrawPixel(X1, Y1, color);
-	}
+	ILI9341_DrawPixel(X1, Y1, color);
 }
 
 void ILI9341_DrawFilledRectangleCoord(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t color)
