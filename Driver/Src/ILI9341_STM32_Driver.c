@@ -358,11 +358,11 @@ void ILI9341_DrawRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t heig
 void ILI9341_DrawHLine(uint16_t x, uint16_t y, uint16_t width, uint16_t color)
 {
 	if((x >=LCD_WIDTH) || (y >=LCD_HEIGHT)) return;
-	if((x+width-1)>=LCD_WIDTH)
+	if((x+width)>=LCD_WIDTH)
 	{
 		width=LCD_WIDTH-x;
 	}
-	ILI9341_SetAddress(x, y, x+width-1, y);
+	ILI9341_SetAddress(x, y, x+width, y);
 	ILI9341_DrawColorBurst(color, width);
 }
 
@@ -370,12 +370,12 @@ void ILI9341_DrawVLine(uint16_t x, uint16_t y, uint16_t height, uint16_t color)
 {
 	if((x >=LCD_WIDTH) || (y >=LCD_HEIGHT)) return;
 
-	if((y+height-1)>=LCD_HEIGHT)
+	if((y+height)>=LCD_HEIGHT)
 	{
 		height=LCD_HEIGHT-y;
 	}
 
-	ILI9341_SetAddress(x, y, x, y+height-1);
+	ILI9341_SetAddress(x, y, x, y+height);
 	ILI9341_DrawColorBurst(color, height);
 }
 

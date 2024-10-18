@@ -78,15 +78,21 @@ void ILI9341_DrawFilledCircle(uint16_t X, uint16_t Y, uint16_t radius, uint16_t 
 	}
 }
 
-void ILI9341_DrawHollowRectangleCoord(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t color)
+void ILI9341_DrawHollowRectangleCoord(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t color, uint16_t thickness)
 {
+	/*X0, Y0 = top left corner ; X1,Y1 bottom right corner; thickness in pixels*/
+	if(X0>X1 || Y0>Y1) return;
+	if(thickness <= 0) thickness = 1;
+
 	uint16_t xLen = abs(X0-X1);
 	uint16_t yLen = abs(Y0-Y1);
-	ILI9341_DrawHLine(X0, Y0, xLen, color);
-	ILI9341_DrawHLine(X0, Y1, xLen, color);
-	ILI9341_DrawVLine(X0, Y0, yLen, color);
-	ILI9341_DrawVLine(X1, Y0, yLen, color);
-	ILI9341_DrawPixel(X1, Y1, color);
+	for(int i=0; i<thickness; i++){
+		ILI9341_DrawHLine(X0, Y0+i, xLen, color);
+		ILI9341_DrawHLine(X0, Y1-i, xLen, color);
+		ILI9341_DrawVLine(X0+i, Y0, yLen, color);
+		ILI9341_DrawVLine(X1-i, Y0, yLen, color);
+		ILI9341_DrawPixel(X1-i, Y1-i, color);
+	}
 }
 
 void ILI9341_DrawFilledRectangleCoord(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t color)
